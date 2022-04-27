@@ -1,0 +1,64 @@
+class Solution {
+    
+    private boolean[][] visited;
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        visited = new boolean[maze.length][maze[0].length];
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.add(start);
+        return helper(queue, maze,destination);
+        
+    }
+    
+    private boolean helper(Queue<int[]> queue,int[][] maze, int[] destination){
+        
+        while(!queue.isEmpty()){
+            int[] location = queue.poll();
+            
+            int[] left = horizontalMove(location.clone(), -1,maze);
+            int[] right = horizontalMove(location.clone(), 1,maze);
+            int[] down = verticalMove(location.clone(), 1,maze);
+            int[] up = verticalMove(location.clone(), -1,maze);
+            
+            if(!visited[left[0]][left[1]]){
+                visited[left[0]][left[1]] = true;
+                 queue.offer(left);
+            }
+            if(!visited[right[0]][right[1]]){
+                visited[right[0]][right[1]] = true;
+                 queue.offer(right);
+            }
+            if(!visited[down[0]][down[1]]){
+                visited[down[0]][down[1]] = true;
+                 queue.offer(down);
+            }
+             if(!visited[up[0]][up[1]]){
+                visited[up[0]][up[1]] = true;
+                 queue.offer(up);
+            }
+            
+            if(location[0] == destination[0] && location[1] == destination[1]) return true;
+        }
+        
+        return false;
+    }
+    
+    private int[] horizontalMove(int[] current, int direction, int[][] maze){
+        int x = current[0];
+        int y = current[1];
+
+        while(y + direction > -1 && y + direction < maze[0].length &&  maze[x][y + direction] == 0){
+            y = y + direction;
+        }
+        return new int[] {x , y };
+    }
+    
+    private int[] verticalMove(int[] current, int direction, int[][] maze){
+        
+        int x = current[0];
+        int y = current[1];
+        while(x + direction > -1 && x + direction < maze.length && maze[x + direction][y] == 0){
+            x = x + direction;
+        }
+        return new int[] {x , y};
+    }
+}
